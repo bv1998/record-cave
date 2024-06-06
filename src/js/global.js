@@ -1,6 +1,12 @@
 import { ref } from "vue";
+import { nowPlayingObj } from "./fetchProfile";
 
 const data = ref(null);
+export const globalVariable = {
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+    playing: nowPlayingObj,
+};
 
 const base64Credentials = btoa(
     `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`

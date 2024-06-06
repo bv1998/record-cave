@@ -16,7 +16,7 @@ export default defineConfig(({ command, mode }) => {
         },
         define: {
             "process.env.CLIENT_ID": JSON.stringify(env.CLIENT_ID),
-            "process.env.CLIENT_SECRET": env.CLIENT_SECRET,
+            "process.env.CLIENT_SECRET": JSON.stringify(env.CLIENT_SECRET),
         },
     };
 });

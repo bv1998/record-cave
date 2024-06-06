@@ -1,6 +1,7 @@
 <script setup>
-// import { getToken } from "@/js/global";
+import { globalVariable } from "@/js/global";
 // import { ref } from "vue";
+// import {sendPlayingData} from '@/js/fetchProfile';
 
 // const data = ref(null);
 // getToken().then((token) => {
@@ -15,6 +16,7 @@
 //     console.log(data);
 //     console.log(token);
 // });
+console.log(globalVariable.playing);
 </script>
 
 <template>

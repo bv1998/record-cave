@@ -1,7 +1,8 @@
 import { getToken, globalVariable } from "./global";
 const clientId = process.env.CLIENT_ID;
 const params = new URLSearchParams(window.location.search);
-const code = params.get("code");
+let code = params.get("code");
+export let nowPlayingObj = null;
 
 export function getCurrentUrl() {
     return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
@@ -16,7 +17,7 @@ async function redirectToAuthCodeFlow(clientId) {
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("response_type", "code");
-    params.append("redirect_uri", "http://localhost:5173/api");
+    params.append("redirect_uri", "http://localhost:5173");
     params.append("scope", "user-read-private user-read-email");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
@@ -44,12 +45,30 @@ async function generateCodeChallenge(codeVerifier) {
         .replace(/=+$/, "");
 }
 
+window.addEventListener("popstate", handleUrlChange);
+
+function handleUrlChange() {
+    const newParams = new URLSearchParams(window.location.search);
+    const newCode = newParams.get("code");
+
+    if (newCode && newCode !== code) {
+        code = newCode;
+        handleCodeReceived(code);
+    }
+}
+
+async function handleCodeReceived(code) {
+    const accessToken = await getAccessToken(clientId, code);
+    const profile = await fetchProfile(accessToken);
+    const playing = await fetchNowPlaying(accessToken);
+    sendPlayingData(playing);
+    sendProfileData(profile);
+}
+
 if (!code) {
     redirectToAuthCodeFlow(clientId);
 } else {
-    const accessToken = await getAccessToken(clientId, code);
-    const profile = await fetchProfile(accessToken);
-    sendProfileData(profile);
+    handleCodeReceived(code);
 }
 
 async function getAccessToken(clientId, code) {
@@ -59,7 +78,7 @@ async function getAccessToken(clientId, code) {
     params.append("client_id", clientId);
     params.append("grant_type", "authorization_code");
     params.append("code", code);
-    params.append("redirect_uri", "http://localhost:5173/api");
+    params.append("redirect_uri", "http://localhost:5173");
     params.append("code_verifier", verifier);
 
     const result = await fetch("https://accounts.spotify.com/api/token", {
@@ -80,7 +99,22 @@ async function fetchProfile(access_token) {
 
     return await result.json();
 }
+async function fetchNowPlaying(access_token) {
+    const token = access_token;
+    const result = await fetch(
+        "https://api.spotify.com/v1/me/player/currently-playing",
+        {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+        }
+    );
+    return await result.json();
+}
 
+export function sendPlayingData(playing) {
+    nowPlayingObj = playing;
+    return playing;
+}
 export function sendProfileData(profile) {
     return profile;
 }
