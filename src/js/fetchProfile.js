@@ -1,5 +1,5 @@
 import { getToken, globalVariable } from "./global";
-const clientId = globalVariable.client_id;
+const clientId = process.env.CLIENT_ID;
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 
