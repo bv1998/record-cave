@@ -53,6 +53,9 @@ export default {
             onSlideChange,
         };
     },
+    created() {
+        this.getNewReleases();
+    },
 };
 </script>
 
@@ -61,13 +64,18 @@ export default {
         <!-- <h1>Hello {{ user_name }},</h1> -->
         <h2>Let’s Dig Your Crates</h2>
         <swiper
-            :slides-per-view="albums.limit"
+            :slides-per-view="5"
             :space-between="50"
             @swiper="onSwiper"
             @slideChange="onSlideChange"
         >
-            <swiper-slide v-for="item in albums.items" :key="item.id">
-                <h4>{{ item.name }}</h4>
+            <swiper-slide v-for="item in albums.items">
+                <img
+                    class="swiper-album-art"
+                    :src="item.images[2].url"
+                    alt="Album Art"
+                />
+                <p>{{ item.name }}</p>
             </swiper-slide>
         </swiper>
     </main>
@@ -76,5 +84,11 @@ export default {
 <style>
 main {
     padding: 0 30px;
+}
+.swiper-album-art {
+    max-width: 100%;
+    width: auto;
+    border-radius: 10px;
+    max-height: 175px;
 }
 </style>

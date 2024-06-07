@@ -1,8 +1,8 @@
-import request from "./../request";
+import caller from "./../caller";
 
 export default {
     getNewReleases(offset, limit, country) {
-        return request.get("browse/new-releases", {
+        return caller.get("browse/new-releases", {
             params: {
                 limit,
                 offset,
@@ -12,7 +12,7 @@ export default {
     },
 
     getCategories(offset, limit, country, locale) {
-        return request.get("browse/categories", {
+        return caller.get("browse/categories", {
             params: {
                 limit,
                 offset,
@@ -23,7 +23,7 @@ export default {
     },
 
     getCategoryPlaylists(category_id, offset, limit, country) {
-        return request.get(`browse/categories/${category_id}/playlists`, {
+        return caller.get(`browse/categories/${category_id}/playlists`, {
             params: {
                 category_id,
                 limit,
