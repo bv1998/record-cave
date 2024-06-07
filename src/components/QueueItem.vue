@@ -1,23 +1,4 @@
-<script setup>
-import { globalVariable } from "@/js/global";
-// import { ref } from "vue";
-// import {sendPlayingData} from '@/js/fetchProfile';
-
-// const data = ref(null);
-// getToken().then((token) => {
-//     fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-//         headers: {
-//             Authorization: `Bearer ${token}`,
-//         },
-//     })
-//         .then((response) => response.json())
-//         .then((json) => (data.value = json))
-//         .catch((error) => console.error(error));
-//     console.log(data);
-//     console.log(token);
-// });
-console.log(globalVariable.playing);
-</script>
+<script setup></script>
 
 <template>
     <div class="queue-wrapper">
